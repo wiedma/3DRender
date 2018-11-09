@@ -16,9 +16,11 @@ public class DrawComp extends JComponent {	private static final long serialVersi
 	public void paintComponent(Graphics g) {
 		
 		for(Point2D point : this.window.getPoints2D())
-			g.drawRect((int) point.getX() - 1, (int) point.getY() - 1, 3, 3);
-			
-		
+			try {
+				g.fillRect((int) point.getX() - 1, (int) point.getY() - 1, 3, 3);
+			}catch(NullPointerException e) {
+				
+			}
 	}
 	
 }

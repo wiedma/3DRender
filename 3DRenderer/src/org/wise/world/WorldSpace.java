@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import org.wise.graphics.Camera;
+import org.wise.math.MatrixMaths;
 import org.wise.math.Point3D;
 import org.wise.math.Vector;
 
@@ -29,7 +30,6 @@ public class WorldSpace {
 		double nenner, zaehler, lambda;
 		Vector schnittpunkt;
 		for(int i = 0; i < points.length; i++) {			
-			///TODO
 			
 			// 1. gerade durch camera und Punkt berechnen
 			geradenAnker = cameraPos.toVector();
@@ -53,13 +53,45 @@ public class WorldSpace {
 			
 			schnittpunkt = geradenAnker.add(geradenRichtung.scalar(lambda));
 					
-			System.out.println(schnittpunkt);
 			// 4. auf bildschirm mappen
-			
+			points[i] = mapToScreen(schnittpunkt, camera.getForward(), ebenenAnker);
 			///			
 		}		
 		
 		return points;
 	}
+	
+	public static Point2D mapToScreen(Vector point, Vector forward, Vector pivot) {
+		Vector e = new Vector(1, 0, 0);
+		Vector v = forward;
+		Vector w = new Vector(0,0,1);
+		
+		double[][] matrix1 = new double[3][3];
+		matrix1[0] = v.toArray();
+		matrix1[1] = v.cross(e).unify().toArray();
+		matrix1[2] = v.cross(v.cross(e)).toArray();
+		
+		double[][] matrix2 = new double[3][3];
+		matrix2[0] = w.toArray();
+		matrix2[1] = w.cross(e).unify().toArray();
+		matrix2[2] = w.cross(w.cross(e)).toArray();
+		
+		double[][] matrixInverted = MatrixMaths.invert(matrix1);
+		double[][] rotation = MatrixMaths.multiply(matrix2, matrixInverted);
+		
+		Vector screenPoint = MatrixMaths.vectorMatrixProduct(point, rotation);
+		
+		Vector translation = pivot;
+		
+		screenPoint.decrement(translation);
+		screenPoint.increment(new Vector(250, 250, 0));
+		
+		System.out.println("Point on Screen: " + screenPoint);
+		
+		
+		return new Point2D.Double(screenPoint.getX(), screenPoint.getY());
+	}
+	
+
 	
 }

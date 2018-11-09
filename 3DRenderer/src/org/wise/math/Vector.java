@@ -75,6 +75,10 @@ public class Vector {
 		return this.scalar(1 / this.abs());
 	}
 	
+	public double[] toArray() {
+		return new double[] {x,y,z};
+	}
+	
 	//////////////////////////////////
 	//////////   GETTERS    //////////
 	//////////////////////////////////
