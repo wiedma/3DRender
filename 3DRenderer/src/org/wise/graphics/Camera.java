@@ -8,6 +8,8 @@ public class Camera {
 	
 	private final double FORWARD_ABSOLUTE = 1;
 	private Vector forward = new Vector(0, 0, -1);
+	private Vector left = new Vector(1, 0, 0);
+	private Vector up = new Vector(0, 1, 0);
 	
 	public Camera() {
 		this(new Point3D(false));

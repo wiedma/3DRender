@@ -24,19 +24,36 @@ public class WorldSpace {
 		Vector geradenAnker, geradenRichtung;
 		Vector ebenenAnker, ebenenNormale;		
 		Point3D cameraPos = camera.getPosition();
+		ebenenAnker = camera.getPosition().toVector().increment(camera.getForward());
+		ebenenNormale = camera.getForward();
+		double nenner, zaehler, lambda;
+		Vector schnittpunkt;
 		for(int i = 0; i < points.length; i++) {			
 			///TODO
 			
 			// 1. gerade durch camera und Punkt berechnen
 			geradenAnker = cameraPos.toVector();
 			geradenRichtung = WorldSpace.points.get(i).toVector().decrement(cameraPos);
-			
-			// 2. ebene der camera berechnen			
-			ebenenAnker = camera.getPosition().toVector().increment(camera.getForward());
-			ebenenNormale = camera.getForward();
-			
+						
 			// 3. schnittpunkt gerade ebene
+			nenner = (-ebenenNormale.getX() * geradenRichtung.getX()) +
+					(ebenenNormale.getY() * geradenRichtung.getY()) +
+					(ebenenNormale.getZ() * geradenRichtung.getZ());
 			
+			if(nenner == 0) continue;
+			
+			zaehler = + (ebenenNormale.getX() * geradenAnker.getX()) 
+					- (ebenenNormale.getY() * geradenAnker.getY()) 
+					- (ebenenNormale.getZ() * geradenAnker.getZ()) 
+					- (ebenenNormale.getX() * ebenenAnker.getX())
+					+ (ebenenNormale.getY() * ebenenAnker.getY())
+					+ (ebenenNormale.getZ() * ebenenAnker.getZ());
+			
+			lambda = zaehler / nenner;
+			
+			schnittpunkt = geradenAnker.add(geradenRichtung.scalar(lambda));
+					
+			System.out.println(schnittpunkt);
 			// 4. auf bildschirm mappen
 			
 			///			

@@ -2,6 +2,7 @@ package org.wise.main;
 
 import org.wise.graphics.Camera;
 import org.wise.graphics.Window;
+import org.wise.math.Point3D;
 import org.wise.math.Vector;
 
 public class Main {
@@ -10,7 +11,10 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
+		Point3D p = new Point3D(3, 3, -3);
+		
 		window = new Window(new Camera());
+		
 		
 	}
 	
