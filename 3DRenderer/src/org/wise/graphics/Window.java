@@ -52,23 +52,22 @@ public class Window extends JFrame implements KeyListener{ private static final 
 
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_A) {
-			camera.getPosition().increment(new Vector(-1, 0, 0));
+			camera.getPosition().increment(camera.getRight().scalar(-1));
 		}
 		if(e.getKeyCode() == KeyEvent.VK_D) {
-			camera.getPosition().increment(new Vector(1, 0, 0));
+			camera.getPosition().increment(camera.getRight());
 		}
 		if(e.getKeyCode() == KeyEvent.VK_SHIFT) {
-			camera.getPosition().increment(new Vector(0, 1, 0));
+			camera.getPosition().increment(camera.getUp());
 		}
 		if(e.getKeyCode() == KeyEvent.VK_CONTROL) {
-			camera.getPosition().increment(new Vector(0, -1, 0));
+			camera.getPosition().increment(camera.getUp().scalar(-1));
 		}
-		
 		if(e.getKeyCode() == KeyEvent.VK_W) {
-			camera.getPosition().increment(new Vector(0, 0, -1));
+			camera.getPosition().increment(camera.getForward());
 		}
 		if(e.getKeyCode() == KeyEvent.VK_S) {
-			camera.getPosition().increment(new Vector(0, 0, 1));
+			camera.getPosition().increment(camera.getForward().scalar(-1));
 		}
 		
 		repaint();

@@ -11,10 +11,9 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		Point3D p1 = new Point3D(0,150,-1);
+		Point3D p1 = new Point3D(50,0,-10);
 		
 		window = new Window(new Camera(new Point3D(0, 0, 0)));
-		
 		
 	}
 	

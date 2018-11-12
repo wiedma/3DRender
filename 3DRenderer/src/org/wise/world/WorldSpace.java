@@ -52,16 +52,34 @@ public class WorldSpace {
 			lambda = zaehler / nenner;
 			
 			schnittpunkt = geradenAnker.add(geradenRichtung.scalar(lambda));
+			
+			System.out.println("Schnittpunkt: " + schnittpunkt);
 					
 			// 4. auf bildschirm mappen
-			points[i] = mapToScreen(schnittpunkt, camera.getForward(), ebenenAnker);
+			points[i] = mapToScreen(schnittpunkt, ebenenAnker, camera);
 			///			
 		}		
 		
 		return points;
 	}
 	
-	public static Point2D mapToScreen(Vector point, Vector forward, Vector pivot) {
+	public static Point2D mapToScreen(Vector schnittpunkt, Vector ebenenAnker, Camera camera) {
+		Vector up = camera.getUp();
+		Vector right = camera.getRight();
+		Vector ankerZuSchnitt = schnittpunkt.subtract(ebenenAnker);
+		
+		double angleWithY = Math.acos((ankerZuSchnitt.scalar(up))/(ankerZuSchnitt.abs() * up.abs()));
+		double angleWithX = Math.acos((ankerZuSchnitt.scalar(right))/(ankerZuSchnitt.abs() * right.abs()));
+		double radius = ankerZuSchnitt.abs();
+		
+		return new Point2D.Double(
+								Math.cos(angleWithX) * radius,
+								Math.cos(angleWithY) * radius
+		);
+	}
+	
+	@Deprecated
+	public static Point2D mapToScreenOld(Vector point, Vector forward, Vector pivot) {
 		Vector e = new Vector(1, 0, 0);
 		Vector v = forward;
 		Vector w = new Vector(0,0,1);
