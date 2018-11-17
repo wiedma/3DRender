@@ -81,8 +81,8 @@ public class WorldSpace {
 		}
 		
 		return new Point2D.Double(
-								Math.cos(angleWithX) * radius,
-								Math.cos(angleWithY) * radius
+								Math.cos(angleWithX) * radius * camera.getPixelPerUnit(),
+								Math.cos(angleWithY) * radius * camera.getPixelPerUnit()
 		);
 	}
 	
@@ -118,6 +118,8 @@ public class WorldSpace {
 		return new Point2D.Double(screenPoint.getX(), screenPoint.getY());
 	}
 	
-
+	public static ArrayList<Point3D> getPoints() {
+		return points;
+	}
 	
 }

@@ -11,12 +11,32 @@ public class Camera {
 	private Vector up = new Vector(0, 1, 0);
 	private Vector right = new Vector(1, 0, 0);
 	
+	private double fov;	
+	private double pixelPerUnit = 1;
+	
 	public Camera() {
 		this(new Point3D(false));
 	}
 	
 	public Camera(Point3D position) {
 		this.position = position;
+		
+		this.setFOV(Math.PI/2, null);
+	}
+	
+	public void updatePixelPerUnit(Window window) {
+		if(window == null)
+			return;
+		this.pixelPerUnit = (window.getDrawComp().getWidth()/2) / Math.tan(this.fov/2);
+	}
+	
+	//////////////////////////////////
+	//////////   SETTER(S)  //////////
+	//////////////////////////////////
+	
+	public void setFOV(double degreeRadians, Window window) {
+		this.fov = degreeRadians;
+		this.updatePixelPerUnit(window);
 	}
 	
 	//////////////////////////////////
@@ -40,5 +60,13 @@ public class Camera {
 	
 	public Point3D getPosition() {
 		return this.position;
+	}
+	
+	public double getPixelPerUnit() {
+		return this.pixelPerUnit;
+	}
+	
+	public double getFOV() {
+		return this.fov;
 	}
 }
