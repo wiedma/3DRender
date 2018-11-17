@@ -6,7 +6,7 @@ import org.wise.math.Vector;
 public class Camera {
 	private Point3D position;
 	
-	private final double FORWARD_ABSOLUTE = 1;
+//	private final double FORWARD_ABSOLUTE = 1;
 	private Vector forward = new Vector(0, 0, -1);
 	private Vector up = new Vector(0, 1, 0);
 	private Vector right = new Vector(1, 0, 0);

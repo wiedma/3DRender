@@ -48,7 +48,7 @@ public class Vector {
 	}
 	
 	public double scalar(Vector v) {
-		return (this.x * v.x) - (this.y * v.y) - (this.z * v.z); 
+		return (this.x * v.x) + (this.y * v.y) + (this.z * v.z); 
 	}
 	
 	public Vector scalar(double a) {

@@ -52,18 +52,16 @@ public class WorldSpace {
 			lambda = zaehler / nenner;
 			
 			schnittpunkt = geradenAnker.add(geradenRichtung.scalar(lambda));
-			
-			System.out.println("Schnittpunkt: " + schnittpunkt);
 					
 			// 4. auf bildschirm mappen
-			points[i] = mapToScreen(schnittpunkt, ebenenAnker, camera);
+			points[i] = mapToScreen(schnittpunkt, ebenenAnker, camera, WorldSpace.points.get(i));
 			///			
 		}		
 		
 		return points;
 	}
 	
-	public static Point2D mapToScreen(Vector schnittpunkt, Vector ebenenAnker, Camera camera) {
+	public static Point2D mapToScreen(Vector schnittpunkt, Vector ebenenAnker, Camera camera, Point3D punkt) {
 		Vector up = camera.getUp();
 		Vector right = camera.getRight();
 		Vector ankerZuSchnitt = schnittpunkt.subtract(ebenenAnker);
@@ -71,6 +69,16 @@ public class WorldSpace {
 		double angleWithY = Math.acos((ankerZuSchnitt.scalar(up))/(ankerZuSchnitt.abs() * up.abs()));
 		double angleWithX = Math.acos((ankerZuSchnitt.scalar(right))/(ankerZuSchnitt.abs() * right.abs()));
 		double radius = ankerZuSchnitt.abs();
+		
+		Vector PunktZuSchnitt = schnittpunkt.subtract(punkt.toVector());
+		Vector PunktZuCamera = camera.getPosition().toVector().subtract(punkt.toVector());
+		
+		if(PunktZuSchnitt.abs() > PunktZuCamera.abs()) {
+			//Wenn der Winkel von Bildpunkt zu Schnittpunkt und Bildpunkt zu Kamera 180 ist, soll trotzdem gerendert werden (Bildpunkt zwischen Ebene und Kamera)
+			if(!(Math.acos((PunktZuSchnitt.scalar(PunktZuCamera))/(PunktZuSchnitt.abs() * PunktZuCamera.abs())) > 0.1)) {
+				return null;
+			}
+		}
 		
 		return new Point2D.Double(
 								Math.cos(angleWithX) * radius,
