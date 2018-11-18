@@ -4,61 +4,26 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import org.wise.graphics.Camera;
+import org.wise.graphics.GraphicObject;
+import org.wise.graphics.Window;
 import org.wise.math.MatrixMaths;
 import org.wise.math.Point3D;
 import org.wise.math.Vector;
 
-public class WorldSpace {
+public class WorldSpace{
 	
-	private static ArrayList<Point3D> points = new ArrayList<Point3D>();
+	private static ArrayList<GraphicObject> graphics = new ArrayList<GraphicObject>();
 	
-	public static void addPoint(Point3D point) {
-		WorldSpace.points.add(point);
-		
-		System.out.println("added: " + point);
+//	public static ArrayList<Point2D> schnittpunkte = new ArrayList<Point2D>();
+	
+	public static void addPoint(GraphicObject g) {
+		WorldSpace.graphics.add(g);
 	}
 	
-	public static Point2D[] getPoints2D(Camera camera) {
-		Point2D[] points = new Point2D[WorldSpace.points.size()];
-		
-		
-		Vector geradenAnker, geradenRichtung;
-		Vector ebenenAnker, ebenenNormale;		
-		Point3D cameraPos = camera.getPosition();
-		ebenenAnker = camera.getPosition().toVector().increment(camera.getForward());
-		ebenenNormale = camera.getForward();
-		double nenner, zaehler, lambda;
-		Vector schnittpunkt;
-		for(int i = 0; i < points.length; i++) {			
-			
-			// 1. gerade durch camera und Punkt berechnen
-			geradenAnker = cameraPos.toVector();
-			geradenRichtung = WorldSpace.points.get(i).toVector().decrement(cameraPos);
-						
-			// 3. schnittpunkt gerade ebene
-			nenner = (-ebenenNormale.getX() * geradenRichtung.getX()) +
-					(ebenenNormale.getY() * geradenRichtung.getY()) +
-					(ebenenNormale.getZ() * geradenRichtung.getZ());
-			
-			if(nenner == 0) continue;
-			
-			zaehler = + (ebenenNormale.getX() * geradenAnker.getX()) 
-					- (ebenenNormale.getY() * geradenAnker.getY()) 
-					- (ebenenNormale.getZ() * geradenAnker.getZ()) 
-					- (ebenenNormale.getX() * ebenenAnker.getX())
-					+ (ebenenNormale.getY() * ebenenAnker.getY())
-					+ (ebenenNormale.getZ() * ebenenAnker.getZ());
-			
-			lambda = zaehler / nenner;
-			
-			schnittpunkt = geradenAnker.add(geradenRichtung.scalar(lambda));
-					
-			// 4. auf bildschirm mappen
-			points[i] = mapToScreen(schnittpunkt, ebenenAnker, camera, WorldSpace.points.get(i));
-			///			
+	public static void draw(Camera camera, Window window) {
+		for(GraphicObject g : graphics) {			
+			g.draw(camera, window);
 		}		
-		
-		return points;
 	}
 	
 	public static Point2D mapToScreen(Vector schnittpunkt, Vector ebenenAnker, Camera camera, Point3D punkt) {
@@ -118,7 +83,17 @@ public class WorldSpace {
 		return new Point2D.Double(screenPoint.getX(), screenPoint.getY());
 	}
 	
-	public static ArrayList<Point3D> getPoints() {
+	public static ArrayList<GraphicObject> getGraphicObjects() {
+		return graphics;
+	}
+	
+	public static ArrayList<Point3D> getPoints(){
+		ArrayList<Point3D> points = new ArrayList<Point3D>();
+		for(GraphicObject g : graphics) {
+			if(g instanceof Point3D) {
+				points.add((Point3D) g);
+			}
+		}
 		return points;
 	}
 	

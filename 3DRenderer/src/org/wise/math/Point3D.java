@@ -1,10 +1,15 @@
 package org.wise.math;
 
+import java.awt.geom.Point2D;
+
+import org.wise.graphics.Camera;
+import org.wise.graphics.GraphicObject;
+import org.wise.graphics.Window;
 import org.wise.world.WorldSpace;
 
-public class Point3D {
+public class Point3D implements GraphicObject{
 	private double x, y, z;
-	
+	private Point2D screenPoint;
 	private boolean visible = true;
 	
 	public Point3D() {
@@ -46,6 +51,38 @@ public class Point3D {
 				this.y,
 				this.z
 			);
+	}
+	
+	public void draw(Camera camera, Window window) {
+		
+		Vector geradenAnker, geradenRichtung;
+		Vector ebenenAnker, ebenenNormale;		
+		Point3D cameraPos = camera.getPosition();
+		ebenenAnker = camera.getPosition().toVector().increment(camera.getForward());
+		ebenenNormale = camera.getForward();
+		double nenner, zaehler, lambda;
+		Vector schnittpunkt;		
+			
+		// 1. gerade durch camera und Punkt berechnen
+		geradenAnker = cameraPos.toVector();
+		geradenRichtung = this.toVector().decrement(cameraPos);
+					
+		// 3. schnittpunkt gerade ebene
+		nenner = ebenenNormale.scalar(geradenRichtung);
+		
+		if(nenner == 0) return;
+		
+		zaehler = ebenenNormale.scalar(geradenAnker) - ebenenNormale.scalar(ebenenAnker);
+		
+		lambda = - (zaehler / nenner);
+		
+		schnittpunkt = geradenAnker.add(geradenRichtung.scalar(lambda));
+//			schnittpunkte.add(new Point2D.Double(schnittpunkt.getX() - camera.getPosition().getX(), schnittpunkt.getZ() - camera.getPosition().getZ())); 
+				
+		// 4. auf bildschirm mappen
+		screenPoint = WorldSpace.mapToScreen(schnittpunkt, ebenenAnker, camera, this);
+		window.registerPoint(screenPoint);
+			
 	}
 	
 	//////////////////////////////////

@@ -10,8 +10,6 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		Point3D p1 = new Point3D(15,0,-20);
-		
 		window = new Window(new Camera(new Point3D(0, 0, 0)));
 		window.generateDraufsicht();
 		

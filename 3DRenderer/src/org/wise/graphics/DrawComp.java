@@ -7,6 +7,8 @@ import java.awt.geom.Point2D;
 
 import javax.swing.JComponent;
 
+import org.wise.math.Vector;
+
 public class DrawComp extends JComponent {	private static final long serialVersionUID = 5507894481934691627L;
 
 	private Window window;
@@ -18,70 +20,49 @@ public class DrawComp extends JComponent {	private static final long serialVersi
 	}
 
 	public void paintComponent(Graphics gOld) {
+		
 		Graphics2D g = (Graphics2D) gOld;
 		
-		for(Point2D point : this.window.getPoints2D()) {
-			if(point == null)
-				continue;
-			g.fillRect((int) (point.getX()) + (this.getWidth()/2) - 1, (this.getHeight()/2) - (int) (point.getY()) - 1, 3, 3);
-		}
-		
-		
-//		Point2D point2, point3;
-//		for(Point2D point : this.window.getPoints2D()) {
-//			if(point == null)
-//				continue;
-//			
-//			point2 = this.window.getPoints2D()[(int) (Math.random() * this.window.getPoints2D().length)];
-//			if(point2 == null)
-//				continue;
-//			
-//			point3 = this.window.getPoints2D()[(int) (Math.random() * this.window.getPoints2D().length)];
-//			if(point3 == null)
-//				continue;
-//			
-////			for(Point2D point2 : this.window.getPoints2D()) {
-////				if(point2 == null)
-////					continue;
-//				
-//			g.setColor(new Color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256)));
-//			
-//			g.fillPolygon(
-//					new int[]{(int) (point.getX()) + (this.getWidth()/2) - 1, (int) (point2.getX()) + (this.getWidth()/2) - 1, (int) (point3.getX()) + (this.getWidth()/2) - 1},
-//					new int[]{(int) (point.getY()) + (this.getHeight()/2) - 1, (int) (point2.getY()) + (this.getHeight()/2) - 1, (int) (point3.getY()) + (this.getHeight()/2) - 1},
-//					3);
-////			g.draw(, (this.getHeight()/2) - (int) (point.getY()) - 1,
-////					(int) (point2.getX()) + (this.getWidth()/2) - 1, (this.getHeight()/2) - (int) (point2.getY()) - 1
-////				);
-////			}
-			
-//		}
-		
 		if(this.drawFadenkreuz) {
+			
+//			g.setColor(Color.RED);
+//			
+//			for(Point2D point : WorldSpace.schnittpunkte) {
+//				if(point == null)
+//					continue;
+//				g.fillRect((int) (point.getX()) + (this.getWidth()/2) - 1, (this.getHeight()/2) + (int) (point.getY()) - 1, 3, 3);
+//			}
+//			g.setColor(Color.BLACK);
+//			
+//			WorldSpace.schnittpunkte = new ArrayList<Point2D>();
+			
 			g.drawLine(this.getWidth()/2, 0, this.getWidth()/2, this.getHeight());
 			g.drawLine(0, this.getHeight()/2, this.getWidth(), this.getHeight()/2);
 			
-//			g.drawLine(this.getWidth()/2, this.getHeight()/2,
-//					(int) ((this.getWidth()/2) + Math.tan(-window.getWindowMain().getCamera().getFOV()/2) * 50),
-//					(int) ((this.getWidth()/2) + Math.tan(-window.getWindowMain().getCamera().getFOV()/2) * 50)
-//				);
-			
+			Vector forward = window.getWindowMain().getCamera().getForward();
 			
 			
 			AffineTransform defaultAT = g.getTransform();
 			
 			g.rotate(-window.getWindowMain().getCamera().getFOV()/2, this.getWidth()/2, this.getHeight()/2);			
-			g.drawLine(this.getWidth()/2, this.getHeight()/2, this.getWidth()/2, -this.getHeight()-this.getWidth());
+			g.drawLine(this.getWidth()/2, this.getHeight()/2,
+					this.getWidth()/2 + (int)(forward.getX() * 2 * this.getWidth()), this.getHeight() + (int)(forward.getZ() * 2 * this.getHeight()));
 			
 			g.rotate(window.getWindowMain().getCamera().getFOV(), this.getWidth()/2, this.getHeight()/2);			
-			g.drawLine(this.getWidth()/2, this.getHeight()/2, this.getWidth()/2, -this.getHeight()-this.getWidth());
+			g.drawLine(this.getWidth()/2, this.getHeight()/2,
+					this.getWidth()/2 + (int)(forward.getX() * 2 * this.getWidth()), this.getHeight() + (int)(forward.getZ() * 2 * this.getHeight()));
 			
 			g.setTransform(defaultAT);
-//			
-////					(int) ((this.getWidth()/2) + Math.tan(window.getWindowMain().getCamera().getFOV()/2) * this.getHeight()/2),
-//					0
-				
 			
+		}
+		else {
+			window.getAllPoints();
+		}
+		
+		for(Point2D point : this.window.getPoints2D()) {
+			if(point == null)
+				continue;
+			g.fillRect((int) (point.getX()) + (this.getWidth()/2) - 1, (this.getHeight()/2) - (int) (point.getY()) - 1, 3, 3);
 		}
 	}
 	

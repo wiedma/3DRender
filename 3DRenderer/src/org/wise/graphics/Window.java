@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.JFrame;
 
@@ -21,8 +22,10 @@ public class Window extends JFrame implements KeyListener, ComponentListener { p
 	
 	private WindowDraufsicht windowDraufsicht;
 	
+	private ArrayList<Point2D> screenPoints = new ArrayList<Point2D>();
+	
 	public Window() {
-		this(new Camera(new Point3D(0, 0, 0)));
+		this(new Camera(new Point3D(0, 0, 0, false)));
 	}
 	
 	public Window(Camera camera) {
@@ -46,9 +49,19 @@ public class Window extends JFrame implements KeyListener, ComponentListener { p
 		this.setVisible(true);
 	}
 	
-	public Point2D[] getPoints2D() {
-		return WorldSpace.getPoints2D(this.camera);
+	public ArrayList<Point2D> getPoints2D() {
+		return screenPoints;
 	}
+	
+	public void getAllPoints() {
+		screenPoints.clear();
+		WorldSpace.draw(camera, this);
+	}
+	
+	public void registerPoint(Point2D p){
+		screenPoints.add(p);
+	}
+	
 	
 	public void generateDraufsicht() {
 		if(this.windowDraufsicht != null)
@@ -106,9 +119,27 @@ public class Window extends JFrame implements KeyListener, ComponentListener { p
 		if(e.getKeyCode() == KeyEvent.VK_MINUS) {
 			camera.setFOV(camera.getFOV()+(Math.PI/100), this);			
 		}
-		
 		if(e.getKeyCode() == KeyEvent.VK_PLUS) {
 			camera.setFOV(camera.getFOV()-(Math.PI/100), this);			
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			camera.rotate(camera.getUp(), -(Math.PI/100));
+		}
+		if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+			camera.rotate(camera.getUp(), (Math.PI/100));
+		}
+		if(e.getKeyCode() == KeyEvent.VK_UP) {
+			camera.rotate(camera.getRight(), (Math.PI/100));
+		}
+		if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+			camera.rotate(camera.getRight(), -(Math.PI/100));
+		}
+		if(e.getKeyCode() == KeyEvent.VK_Q) {
+			camera.rotate(camera.getForward(), (Math.PI/100));
+		}
+		if(e.getKeyCode() == KeyEvent.VK_E) {
+			camera.rotate(camera.getForward(), -(Math.PI/100));
 		}
 		
 		this.repaintEverything();
@@ -140,14 +171,14 @@ public class Window extends JFrame implements KeyListener, ComponentListener { p
 			this.setLocationRelativeTo(windowMain);
 		}
 		
-		public Point2D[] getPoints2D() {
+		public ArrayList<Point2D> getPoints2D() {
 			ArrayList<Point3D> points3D = WorldSpace.getPoints();
 			
 			Point2D[] points2D = new Point2D[points3D.size()];
 			for(int i = 0; i < points2D.length; i++) {
 				points2D[i] = new Point2D.Double(points3D.get(i).getX() - this.windowMain.getCamera().getPosition().getX(), -points3D.get(i).getZ() + this.windowMain.getCamera().getPosition().getZ());
 			}
-			return points2D;
+			return new ArrayList<Point2D>(Arrays.asList(points2D));
 		}
 		
 		public Window getWindowMain() {
