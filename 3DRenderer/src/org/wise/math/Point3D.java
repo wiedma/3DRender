@@ -1,5 +1,6 @@
 package org.wise.math;
 
+import java.awt.Graphics;
 import java.awt.geom.Point2D;
 
 import org.wise.graphics.Camera;
@@ -25,7 +26,7 @@ public class Point3D implements GraphicObject{
 		this.y = y;
 		this.z = z;
 		
-		WorldSpace.addPoint(this);
+		WorldSpace.addObject(this);
 	}
 	
 	public Point3D(double x, double y, double z, boolean visible) {
@@ -36,7 +37,7 @@ public class Point3D implements GraphicObject{
 		this.visible = visible;
 		
 		if(this.visible)
-			WorldSpace.addPoint(this);
+			WorldSpace.addObject(this);
 	}
 	
 	public void increment(Vector v) {
@@ -53,7 +54,7 @@ public class Point3D implements GraphicObject{
 			);
 	}
 	
-	public void draw(Camera camera, Window window) {
+	public void draw(Camera camera, Window window, Graphics g) {
 		
 		Vector geradenAnker, geradenRichtung;
 		Vector ebenenAnker, ebenenNormale;		
@@ -81,7 +82,8 @@ public class Point3D implements GraphicObject{
 				
 		// 4. auf bildschirm mappen
 		screenPoint = WorldSpace.mapToScreen(schnittpunkt, ebenenAnker, camera, this);
-		window.registerPoint(screenPoint);
+		if(screenPoint != null)
+		g.fillRect((int) (screenPoint.getX()) + (window.getWidth()/2), (window.getHeight()/2) - (int) (screenPoint.getY()), 1, 1);
 			
 	}
 	
@@ -99,6 +101,10 @@ public class Point3D implements GraphicObject{
 	
 	public double getZ() {
 		return this.z;
+	}
+	
+	public Point2D getScreenPoint() {
+		return screenPoint;
 	}
 	
 	public String toString() {

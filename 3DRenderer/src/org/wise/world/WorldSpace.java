@@ -1,5 +1,6 @@
 package org.wise.world;
 
+import java.awt.Graphics;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
@@ -16,13 +17,17 @@ public class WorldSpace{
 	
 //	public static ArrayList<Point2D> schnittpunkte = new ArrayList<Point2D>();
 	
-	public static void addPoint(GraphicObject g) {
+	public static void addObject(GraphicObject g) {
 		WorldSpace.graphics.add(g);
 	}
 	
-	public static void draw(Camera camera, Window window) {
-		for(GraphicObject g : graphics) {			
-			g.draw(camera, window);
+	public static void draw(Camera camera, Window window, Graphics g) {
+		for(GraphicObject gObj : graphics) {	
+			new Thread() {
+				public void run() {
+					gObj.draw(camera, window, g);
+				}
+			}.start();
 		}		
 	}
 	
@@ -31,9 +36,14 @@ public class WorldSpace{
 		Vector right = camera.getRight();
 		Vector ankerZuSchnitt = schnittpunkt.subtract(ebenenAnker);
 		
-		double angleWithY = Math.acos((ankerZuSchnitt.scalar(up))/(ankerZuSchnitt.abs() * up.abs()));
-		double angleWithX = Math.acos((ankerZuSchnitt.scalar(right))/(ankerZuSchnitt.abs() * right.abs()));
+		double angleWithYCos = (ankerZuSchnitt.scalar(up))/(ankerZuSchnitt.abs() * up.abs());
+		double angleWithXCos = (ankerZuSchnitt.scalar(right))/(ankerZuSchnitt.abs() * right.abs());
+		
 		double radius = ankerZuSchnitt.abs();
+		
+		if(Double.isNaN(angleWithXCos) || Double.isNaN(angleWithYCos)) {
+			return new Point2D.Double(0,0);
+		}
 		
 		Vector PunktZuSchnitt = schnittpunkt.subtract(punkt.toVector());
 		Vector PunktZuCamera = camera.getPosition().toVector().subtract(punkt.toVector());
@@ -46,8 +56,8 @@ public class WorldSpace{
 		}
 		
 		return new Point2D.Double(
-								Math.cos(angleWithX) * radius * camera.getPixelPerUnit(),
-								Math.cos(angleWithY) * radius * camera.getPixelPerUnit()
+								angleWithXCos * radius * camera.getPixelPerUnit(),
+								angleWithYCos * radius * camera.getPixelPerUnit()
 		);
 	}
 	

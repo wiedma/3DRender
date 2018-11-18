@@ -1,6 +1,7 @@
 package org.wise.graphics;
 
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
@@ -14,7 +15,7 @@ import javax.swing.JFrame;
 import org.wise.math.Point3D;
 import org.wise.world.WorldSpace;
 
-public class Window extends JFrame implements KeyListener, ComponentListener { private static final long serialVersionUID = 5325798843479656003L;
+public class Window extends JFrame implements KeyListener, ComponentListener, GraphicObject { private static final long serialVersionUID = 5325798843479656003L;
 	
 	protected DrawComp dc;
 	
@@ -53,9 +54,8 @@ public class Window extends JFrame implements KeyListener, ComponentListener { p
 		return screenPoints;
 	}
 	
-	public void getAllPoints() {
-		screenPoints.clear();
-		WorldSpace.draw(camera, this);
+	public void draw(Camera camera, Window window, Graphics g) {
+		WorldSpace.draw(camera, window, g);
 	}
 	
 	public void registerPoint(Point2D p){

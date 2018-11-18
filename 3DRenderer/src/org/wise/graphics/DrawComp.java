@@ -21,6 +21,7 @@ public class DrawComp extends JComponent {	private static final long serialVersi
 
 	public void paintComponent(Graphics gOld) {
 		
+		
 		Graphics2D g = (Graphics2D) gOld;
 		
 		if(this.drawFadenkreuz) {
@@ -54,16 +55,17 @@ public class DrawComp extends JComponent {	private static final long serialVersi
 			
 			g.setTransform(defaultAT);
 			
+			for(Point2D point : this.window.getPoints2D()) {
+				if(point == null)
+					continue;
+				g.fillRect((int) (point.getX()) + (this.getWidth()/2) - 1, (this.getHeight()/2) - (int) (point.getY()) - 1, 3, 3);
+			}
+			
 		}
 		else {
-			window.getAllPoints();
+			window.draw(window.getCamera(), window, g);
 		}
 		
-		for(Point2D point : this.window.getPoints2D()) {
-			if(point == null)
-				continue;
-			g.fillRect((int) (point.getX()) + (this.getWidth()/2) - 1, (this.getHeight()/2) - (int) (point.getY()) - 1, 3, 3);
-		}
 	}
 	
 	public void setDrawFadenkreuz(boolean drawFadenkreuz) {

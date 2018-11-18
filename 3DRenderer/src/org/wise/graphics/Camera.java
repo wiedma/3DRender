@@ -121,9 +121,9 @@ public class Camera {
 				}
 		};
 		
-		forward = MatrixMaths.vectorMatrixProduct(forward, drehmatrix);
-		up = MatrixMaths.vectorMatrixProduct(up, drehmatrix);
-		right = MatrixMaths.vectorMatrixProduct(right, drehmatrix);
+		forward = MatrixMaths.vectorMatrixProduct(forward, drehmatrix).unify();
+		up = MatrixMaths.vectorMatrixProduct(up, drehmatrix).unify();
+		right = MatrixMaths.vectorMatrixProduct(right, drehmatrix).unify();
 		
 //		System.out.println("--------------------------------------------------------------------------------------------------------------------------");
 //		System.out.println("Forward: " + forward);

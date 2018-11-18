@@ -3,6 +3,7 @@ package org.wise.main;
 import org.wise.graphics.Camera;
 import org.wise.graphics.Window;
 import org.wise.math.Point3D;
+import org.wise.math.Polygon;
 
 public class Main {
 	
@@ -12,6 +13,12 @@ public class Main {
 		
 		window = new Window(new Camera(new Point3D(0, 0, 0)));
 		window.generateDraufsicht();
+		Polygon viereck = new Polygon();
+		viereck.addVertex(new Point3D(0,0,-10, false));
+		viereck.addVertex(new Point3D(10, 0, -10, false));
+		viereck.addVertex(new Point3D(10, 10, -10, false));
+		viereck.addVertex(new Point3D(0, 10, -10, false));
+		
 		
 		
 		double[][] points = { 
@@ -92,10 +99,6 @@ public class Main {
 		
 		for(int i = 0; i < points.length; i++) {
 			new Point3D(points[i][0], points[i][1], points[i][2]);
-			
-//			for(int i2 = 0; i2 < points.length/20; i2++) {
-//				new Point3D(points[i][0]+i2, points[i][1], points[i][2]);
-//			}
 		}
 		
 		
