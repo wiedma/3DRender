@@ -136,10 +136,10 @@ public class Window extends JFrame implements KeyListener, ComponentListener, Gr
 			camera.rotate(camera.getRight(), -(Math.PI/100));
 		}
 		if(e.getKeyCode() == KeyEvent.VK_Q) {
-			camera.rotate(camera.getForward(), (Math.PI/100));
+			camera.rotate(camera.getForward(), -(Math.PI/100));
 		}
 		if(e.getKeyCode() == KeyEvent.VK_E) {
-			camera.rotate(camera.getForward(), -(Math.PI/100));
+			camera.rotate(camera.getForward(), (Math.PI/100));
 		}
 		
 		this.repaintEverything();

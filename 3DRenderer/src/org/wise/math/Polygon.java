@@ -31,7 +31,7 @@ public class Polygon implements GraphicObject {
 		}
 		
 		if(notNull) {
-			g.fillPolygon(xPos, yPos, vertices.size());			
+			g.drawPolygon(xPos, yPos, vertices.size());			
 		}
 		
 	}

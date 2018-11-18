@@ -23,11 +23,7 @@ public class WorldSpace{
 	
 	public static void draw(Camera camera, Window window, Graphics g) {
 		for(GraphicObject gObj : graphics) {	
-			new Thread() {
-				public void run() {
-					gObj.draw(camera, window, g);
-				}
-			}.start();
+			gObj.draw(camera, window, g);
 		}		
 	}
 	
