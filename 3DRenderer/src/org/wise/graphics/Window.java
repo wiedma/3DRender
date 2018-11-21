@@ -29,6 +29,9 @@ public class Window extends JFrame implements KeyListener, ComponentListener { p
 	
 	public static final double ROTATION_SPEED = Math.PI/200;
 	
+	public static final int FPS_CAP = 60;
+	public static int fps;
+	
 	public Window() {
 		this(new Camera(new Point3D(0, 0, 0, false)));
 	}
@@ -75,9 +78,9 @@ public class Window extends JFrame implements KeyListener, ComponentListener { p
 	}
 	
 	public void repaintEverything() {
-		this.repaint();
+		this.dc.paintComponent(this.dc.getGraphics());
 		if(this.windowDraufsicht != null)
-			this.windowDraufsicht.repaint();
+			this.windowDraufsicht.dc.paintComponent(this.windowDraufsicht.dc.getGraphics());
 	}
 	
 	public void switchCamera(Camera c) {

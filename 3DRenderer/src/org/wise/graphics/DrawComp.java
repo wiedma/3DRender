@@ -1,5 +1,7 @@
 package org.wise.graphics;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
@@ -15,14 +17,23 @@ public class DrawComp extends JComponent {	private static final long serialVersi
 
 	private boolean drawFadenkreuz;
 	
+	private Font fontFPS = new Font("arial", Font.BOLD, 30);
+	
 	public DrawComp(Window window) {
 		this.window = window;
 	}
-
+	
+	
 	public void paintComponent(Graphics gOld) {
 		
 		
 		Graphics2D g = (Graphics2D) gOld;
+		
+		g.setColor(Color.white);
+		g.fillRect(0, 0, getWidth(), getHeight());
+		
+		
+		g.setColor(Color.BLACK);
 		
 		if(this.drawFadenkreuz) {
 			
@@ -65,6 +76,11 @@ public class DrawComp extends JComponent {	private static final long serialVersi
 		else {
 			window.draw(g);
 		}
+		
+		
+		g.setColor(Color.GREEN);
+		g.setFont(fontFPS);
+		g.drawString(Window.fps + "", 0, 35);
 		
 	}
 	

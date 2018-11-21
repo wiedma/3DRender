@@ -17,14 +17,14 @@ public class Main {
 	public static void main(String[] args) {
 			
 		try {
-			File f = new File("H://BlenderAwesomeFiles/Dragon.raw");
+			File f = new File("this is a path");
 			FileReader fr = new FileReader(f);
 			BufferedReader br = new BufferedReader(fr);
 		
-			int scale = 200;
+			int scale = 10;
 			
 			while(br.ready()) {
-				Polygon p = new Polygon();
+				Polygon p = new Polygon(); 
 				String s = br.readLine();
 				String[] coordinates = s.split(" ");
 				p.addVertex(new Point3D(Double.parseDouble(coordinates[0])*scale,Double.parseDouble(coordinates[1])*scale, Double.parseDouble(coordinates[2])*scale));
@@ -33,7 +33,7 @@ public class Main {
 			}
 			br.close();
 		}catch(Exception e) {
-			
+			e.printStackTrace();
 		}
 		
 		window = new Window(new Camera(new Point3D(0, 0, 50)));
@@ -161,8 +161,14 @@ public class Main {
 			
 			public void run() {
 				
+				double timeStart, timeUsed;
+				
+				int delayFrame = 1000/Window.FPS_CAP;
+				
 				//main loop
 				while(true) {
+					
+					timeStart = System.currentTimeMillis();
 					
 					
 					Camera camera = window.getCamera();
@@ -214,11 +220,20 @@ public class Main {
 					//repaint
 					window.repaintEverything();
 					
-					try {
-						Thread.sleep(16);
-					}catch(Exception e) {
-					}
 					
+					//TODO calculate FPS in DrawComp ayay
+					
+					timeUsed = System.currentTimeMillis() - timeStart;
+					
+					if(timeUsed < delayFrame) {
+						Window.fps = 1000/delayFrame;
+						try {
+							Thread.sleep(delayFrame - (int) timeUsed);
+						}catch(Exception e) {
+						}
+					} else {
+						Window.fps = 1000/(int)timeUsed;
+					}
 				}
 				
 			}
