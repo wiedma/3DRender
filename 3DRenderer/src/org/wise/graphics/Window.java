@@ -25,6 +25,10 @@ public class Window extends JFrame implements KeyListener, ComponentListener { p
 	
 	private ArrayList<Point2D> screenPoints = new ArrayList<Point2D>();
 	
+	private static boolean[] keysPressed = new boolean[KeyEvent.RESERVED_ID_MAX];
+	
+	public static final double ROTATION_SPEED = Math.PI/200;
+	
 	public Window() {
 		this(new Camera(new Point3D(0, 0, 0, false)));
 	}
@@ -70,7 +74,7 @@ public class Window extends JFrame implements KeyListener, ComponentListener { p
 		this.windowDraufsicht = new WindowDraufsicht(this);
 	}
 	
-	private void repaintEverything() {
+	public void repaintEverything() {
 		this.repaint();
 		if(this.windowDraufsicht != null)
 			this.windowDraufsicht.repaint();
@@ -97,55 +101,63 @@ public class Window extends JFrame implements KeyListener, ComponentListener { p
 	}
 
 	public void keyPressed(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_A) {
-			camera.getPosition().increment(camera.getRight().scalar(-1));
-		}
-		if(e.getKeyCode() == KeyEvent.VK_D) {
-			camera.getPosition().increment(camera.getRight());
-		}
-		if(e.getKeyCode() == KeyEvent.VK_SHIFT) {
-			camera.getPosition().increment(camera.getUp());
-		}
-		if(e.getKeyCode() == KeyEvent.VK_CONTROL) {
-			camera.getPosition().increment(camera.getUp().scalar(-1));
-		}
-		if(e.getKeyCode() == KeyEvent.VK_W) {
-			camera.getPosition().increment(camera.getForward());
-		}
-		if(e.getKeyCode() == KeyEvent.VK_S) {
-			camera.getPosition().increment(camera.getForward().scalar(-1));
-		}
 		
-		if(e.getKeyCode() == KeyEvent.VK_MINUS) {
-			camera.setFOV(camera.getFOV()+(Math.PI/100), this);			
-		}
-		if(e.getKeyCode() == KeyEvent.VK_PLUS) {
-			camera.setFOV(camera.getFOV()-(Math.PI/100), this);			
-		}
+		Window.keysPressed[e.getKeyCode()] = true;
 		
-		if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			camera.rotate(camera.getUp(), -(Math.PI/100));
-		}
-		if(e.getKeyCode() == KeyEvent.VK_LEFT) {
-			camera.rotate(camera.getUp(), (Math.PI/100));
-		}
-		if(e.getKeyCode() == KeyEvent.VK_UP) {
-			camera.rotate(camera.getRight(), (Math.PI/100));
-		}
-		if(e.getKeyCode() == KeyEvent.VK_DOWN) {
-			camera.rotate(camera.getRight(), -(Math.PI/100));
-		}
-		if(e.getKeyCode() == KeyEvent.VK_Q) {
-			camera.rotate(camera.getForward(), -(Math.PI/100));
-		}
-		if(e.getKeyCode() == KeyEvent.VK_E) {
-			camera.rotate(camera.getForward(), (Math.PI/100));
-		}
+//		if(e.getKeyCode() == KeyEvent.VK_A) {
+//			camera.getPosition().increment(camera.getRight().scalar(-1));
+//		}
+//		if(e.getKeyCode() == KeyEvent.VK_D) {
+//			camera.getPosition().increment(camera.getRight());
+//		}
+//		if(e.getKeyCode() == KeyEvent.VK_SHIFT) {
+//			camera.getPosition().increment(camera.getUp());
+//		}
+//		if(e.getKeyCode() == KeyEvent.VK_CONTROL) {
+//			camera.getPosition().increment(camera.getUp().scalar(-1));
+//		}
+//		if(e.getKeyCode() == KeyEvent.VK_W) {
+//			camera.getPosition().increment(camera.getForward());
+//		}
+//		if(e.getKeyCode() == KeyEvent.VK_S) {
+//			camera.getPosition().increment(camera.getForward().scalar(-1));
+//		}
+//		
+//		if(e.getKeyCode() == KeyEvent.VK_MINUS) {
+//			camera.setFOV(camera.getFOV()+(Math.PI/100), this);			
+//		}
+//		if(e.getKeyCode() == KeyEvent.VK_PLUS) {
+//			camera.setFOV(camera.getFOV()-(Math.PI/100), this);			
+//		}
+//		
+//		if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+//			camera.rotate(camera.getUp(), -(Math.PI/100));
+//		}
+//		if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+//			camera.rotate(camera.getUp(), (Math.PI/100));
+//		}
+//		if(e.getKeyCode() == KeyEvent.VK_UP) {
+//			camera.rotate(camera.getRight(), (Math.PI/100));
+//		}
+//		if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+//			camera.rotate(camera.getRight(), -(Math.PI/100));
+//		}
+//		if(e.getKeyCode() == KeyEvent.VK_Q) {
+//			camera.rotate(camera.getForward(), -(Math.PI/100));
+//		}
+//		if(e.getKeyCode() == KeyEvent.VK_E) {
+//			camera.rotate(camera.getForward(), (Math.PI/100));
+//		}
 		
-		this.repaintEverything();
+//		this.repaintEverything();
 	}
 
 	public void keyReleased(KeyEvent e) {
+		Window.keysPressed[e.getKeyCode()] = false;
+	}
+	
+	public static boolean isKeyPressed(int keyCode) {
+		return Window.keysPressed[keyCode];
 	}
 	
 	public DrawComp getDrawComp() {

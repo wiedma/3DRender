@@ -1,5 +1,6 @@
 package org.wise.main;
 
+import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -16,17 +17,19 @@ public class Main {
 	public static void main(String[] args) {
 			
 		try {
-			File f = new File("C://Users/Marco/Documents/bank.raw");
+			File f = new File("H://BlenderAwesomeFiles/Dragon.raw");
 			FileReader fr = new FileReader(f);
 			BufferedReader br = new BufferedReader(fr);
+		
+			int scale = 200;
 			
 			while(br.ready()) {
 				Polygon p = new Polygon();
 				String s = br.readLine();
 				String[] coordinates = s.split(" ");
-				p.addVertex(new Point3D(Double.parseDouble(coordinates[0]),Double.parseDouble(coordinates[1]), Double.parseDouble(coordinates[2])));
-				p.addVertex(new Point3D(Double.parseDouble(coordinates[3]),Double.parseDouble(coordinates[4]), Double.parseDouble(coordinates[5])));
-				p.addVertex(new Point3D(Double.parseDouble(coordinates[6]),Double.parseDouble(coordinates[7]), Double.parseDouble(coordinates[8])));
+				p.addVertex(new Point3D(Double.parseDouble(coordinates[0])*scale,Double.parseDouble(coordinates[1])*scale, Double.parseDouble(coordinates[2])*scale));
+				p.addVertex(new Point3D(Double.parseDouble(coordinates[3])*scale,Double.parseDouble(coordinates[4])*scale, Double.parseDouble(coordinates[5])*scale));
+				p.addVertex(new Point3D(Double.parseDouble(coordinates[6])*scale,Double.parseDouble(coordinates[7])*scale, Double.parseDouble(coordinates[8])*scale));
 			}
 			br.close();
 		}catch(Exception e) {
@@ -35,6 +38,8 @@ public class Main {
 		
 		window = new Window(new Camera(new Point3D(0, 0, 50)));
 		window.generateDraufsicht();
+		
+		startMainLoop();
 //		double[][] points = { 
 //			    {        0,    39.034,         0}, {  0.76212,    36.843,         0}, 
 //			    {        3,    36.604,         0}, {        1,    35.604,         0}, 
@@ -149,6 +154,76 @@ public class Main {
 //		
 		
 		
+	}
+	
+	public static void startMainLoop() {
+		(new Thread() {
+			
+			public void run() {
+				
+				//main loop
+				while(true) {
+					
+					
+					Camera camera = window.getCamera();
+					//input
+					if(Window.isKeyPressed(KeyEvent.VK_A)) 
+						camera.getPosition().increment(camera.getRight().scalar(-1));					
+					if(Window.isKeyPressed(KeyEvent.VK_D)) {
+						camera.getPosition().increment(camera.getRight());
+					}
+					if(Window.isKeyPressed(KeyEvent.VK_SHIFT)) {
+						camera.getPosition().increment(camera.getUp());
+					}
+					if(Window.isKeyPressed(KeyEvent.VK_CONTROL)) {
+						camera.getPosition().increment(camera.getUp().scalar(-1));
+					}
+					if(Window.isKeyPressed(KeyEvent.VK_W)) {
+						camera.getPosition().increment(camera.getForward());
+					}
+					if(Window.isKeyPressed(KeyEvent.VK_S)) {
+						camera.getPosition().increment(camera.getForward().scalar(-1));
+					}
+					
+					if(Window.isKeyPressed(KeyEvent.VK_MINUS)) {
+						camera.setFOV(camera.getFOV()+(Window.ROTATION_SPEED), window);			
+					}
+					if(Window.isKeyPressed(KeyEvent.VK_PLUS)) {
+						camera.setFOV(camera.getFOV()-(Window.ROTATION_SPEED), window);			
+					}
+					
+					if(Window.isKeyPressed(KeyEvent.VK_RIGHT)) {
+						camera.rotate(camera.getUp(), -(Window.ROTATION_SPEED));
+					}
+					if(Window.isKeyPressed(KeyEvent.VK_LEFT)) {
+						camera.rotate(camera.getUp(), (Window.ROTATION_SPEED));
+					}
+					if(Window.isKeyPressed(KeyEvent.VK_UP)) {
+						camera.rotate(camera.getRight(), (Window.ROTATION_SPEED));
+					}
+					if(Window.isKeyPressed(KeyEvent.VK_DOWN)) {
+						camera.rotate(camera.getRight(), -(Window.ROTATION_SPEED));
+					}
+					if(Window.isKeyPressed(KeyEvent.VK_Q)) {
+						camera.rotate(camera.getForward(), -(Window.ROTATION_SPEED));
+					}
+					if(Window.isKeyPressed(KeyEvent.VK_E)) {
+						camera.rotate(camera.getForward(), (Window.ROTATION_SPEED));
+					}
+					
+					//repaint
+					window.repaintEverything();
+					
+					try {
+						Thread.sleep(16);
+					}catch(Exception e) {
+					}
+					
+				}
+				
+			}
+			
+		}).start();;
 	}
 	
 //	private static void test() {
