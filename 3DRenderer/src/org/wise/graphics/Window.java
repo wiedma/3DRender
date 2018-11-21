@@ -15,7 +15,7 @@ import javax.swing.JFrame;
 import org.wise.math.Point3D;
 import org.wise.world.WorldSpace;
 
-public class Window extends JFrame implements KeyListener, ComponentListener, GraphicObject { private static final long serialVersionUID = 5325798843479656003L;
+public class Window extends JFrame implements KeyListener, ComponentListener { private static final long serialVersionUID = 5325798843479656003L;
 	
 	protected DrawComp dc;
 	
@@ -54,8 +54,8 @@ public class Window extends JFrame implements KeyListener, ComponentListener, Gr
 		return screenPoints;
 	}
 	
-	public void draw(Camera camera, Window window, Graphics g) {
-		WorldSpace.draw(camera, window, g);
+	public void draw( Graphics g) {
+		WorldSpace.draw(camera, this, g);
 	}
 	
 	public void registerPoint(Point2D p){

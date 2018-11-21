@@ -21,7 +21,7 @@ public class Polygon implements GraphicObject {
 		boolean notNull = true;
 		for(int i = 0; i < vertices.size(); i++) {
 			Point3D vertex = vertices.get(i);
-			vertex.draw(camera, window, g);
+			vertex.calculateScreenPos(camera, window);
 			if(vertex.getScreenPoint() == null) {
 				notNull = false;
 				break;

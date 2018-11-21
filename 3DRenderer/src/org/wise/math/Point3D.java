@@ -55,7 +55,13 @@ public class Point3D implements GraphicObject{
 	}
 	
 	public void draw(Camera camera, Window window, Graphics g) {
-		
+		calculateScreenPos(camera, window);
+		if(screenPoint != null)
+		g.fillRect((int) (screenPoint.getX()) + (window.getWidth()/2), (window.getHeight()/2) - (int) (screenPoint.getY()), 1, 1);
+			
+	}
+	
+	public Point2D calculateScreenPos(Camera camera, Window window) {
 		Vector geradenAnker, geradenRichtung;
 		Vector ebenenAnker, ebenenNormale;		
 		Point3D cameraPos = camera.getPosition();
@@ -71,7 +77,7 @@ public class Point3D implements GraphicObject{
 		// 3. schnittpunkt gerade ebene
 		nenner = ebenenNormale.scalar(geradenRichtung);
 		
-		if(nenner == 0) return;
+		if(nenner == 0) return null;
 		
 		zaehler = ebenenNormale.scalar(geradenAnker) - ebenenNormale.scalar(ebenenAnker);
 		
@@ -81,10 +87,7 @@ public class Point3D implements GraphicObject{
 //			schnittpunkte.add(new Point2D.Double(schnittpunkt.getX() - camera.getPosition().getX(), schnittpunkt.getZ() - camera.getPosition().getZ())); 
 				
 		// 4. auf bildschirm mappen
-		screenPoint = WorldSpace.mapToScreen(schnittpunkt, ebenenAnker, camera, this);
-		if(screenPoint != null)
-		g.fillRect((int) (screenPoint.getX()) + (window.getWidth()/2), (window.getHeight()/2) - (int) (screenPoint.getY()), 1, 1);
-			
+		return (screenPoint = WorldSpace.mapToScreen(schnittpunkt, ebenenAnker, camera, this));
 	}
 	
 	//////////////////////////////////

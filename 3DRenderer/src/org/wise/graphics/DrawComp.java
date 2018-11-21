@@ -63,7 +63,7 @@ public class DrawComp extends JComponent {	private static final long serialVersi
 			
 		}
 		else {
-			window.draw(window.getCamera(), window, g);
+			window.draw(g);
 		}
 		
 	}
