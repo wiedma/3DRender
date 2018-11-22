@@ -78,9 +78,9 @@ public class Window extends JFrame implements KeyListener, ComponentListener { p
 	}
 	
 	public void repaintEverything() {
-		this.dc.paintComponent(this.dc.getGraphics());
+		this.repaint();
 		if(this.windowDraufsicht != null)
-			this.windowDraufsicht.dc.paintComponent(this.windowDraufsicht.dc.getGraphics());
+			this.windowDraufsicht.repaint();
 	}
 	
 	public void switchCamera(Camera c) {

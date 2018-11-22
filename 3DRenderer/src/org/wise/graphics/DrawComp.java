@@ -9,6 +9,7 @@ import java.awt.geom.Point2D;
 
 import javax.swing.JComponent;
 
+import org.wise.main.Main;
 import org.wise.math.Vector;
 
 public class DrawComp extends JComponent {	private static final long serialVersionUID = 5507894481934691627L;
@@ -26,14 +27,10 @@ public class DrawComp extends JComponent {	private static final long serialVersi
 	
 	public void paintComponent(Graphics gOld) {
 		
+		long timeStart = System.currentTimeMillis();
+		double delay = 1000/Window.FPS_CAP;
 		
 		Graphics2D g = (Graphics2D) gOld;
-		
-		g.setColor(Color.white);
-		g.fillRect(0, 0, getWidth(), getHeight());
-		
-		
-		g.setColor(Color.BLACK);
 		
 		if(this.drawFadenkreuz) {
 			
@@ -77,10 +74,25 @@ public class DrawComp extends JComponent {	private static final long serialVersi
 			window.draw(g);
 		}
 		
+		long timeUsed = System.currentTimeMillis() - timeStart;
+		
+		if(timeUsed < delay){
+			Window.fps = Window.FPS_CAP;
+			try{
+				Thread.sleep((long) delay - timeUsed);
+			} catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		else{
+			Window.fps =(int) (1000/timeUsed);
+		}
 		
 		g.setColor(Color.GREEN);
 		g.setFont(fontFPS);
 		g.drawString(Window.fps + "", 0, 35);
+		
+		Main.UIFinished = true;
 		
 	}
 	
